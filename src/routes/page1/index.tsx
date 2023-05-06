@@ -1,6 +1,8 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, useSignal } from '@builder.io/qwik';
+import Projector from '~/components/projector/projector';
 
 export default component$(() => {
+  const valueSignal = useSignal('');
   return (
     <div>
       This is Page 1
@@ -8,10 +10,11 @@ export default component$(() => {
       <input
         type='text'
         placeholder='Type your search'
-        onKeyDown$={(e) => console.log(e.key)}
+        onChange$={(e) => (valueSignal.value = e.target.value)}
+        value={valueSignal.value}
       />
       <hr />
-      <div>You typed: </div>
+      <Projector message={valueSignal.value} />
     </div>
   );
 });
