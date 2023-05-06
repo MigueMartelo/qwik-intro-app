@@ -10,7 +10,9 @@ export default component$(() => {
       <input
         type='text'
         placeholder='Type your search'
-        onChange$={(e) => (valueSignal.value = e.target.value)}
+        onInput$={(e) =>
+          (valueSignal.value = (e.target as HTMLInputElement).value)
+        }
         value={valueSignal.value}
       />
       <hr />
