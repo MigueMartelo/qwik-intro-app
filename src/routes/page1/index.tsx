@@ -1,8 +1,20 @@
-import { component$, useSignal } from '@builder.io/qwik';
+import { component$, useSignal, useTask$ } from '@builder.io/qwik';
 import Projector from '~/components/projector/projector';
 
 export default component$(() => {
-  const valueSignal = useSignal('');
+  const messageSignal = useSignal('');
+  const colorSignal = useSignal('black');
+
+  useTask$(({ track }) => {
+    track(() => messageSignal.value);
+
+    if (messageSignal.value.indexOf('llama') !== -1) {
+      colorSignal.value = 'red';
+    } else {
+      colorSignal.value = 'black';
+    }
+  });
+
   return (
     <div>
       This is Page 1
@@ -11,12 +23,14 @@ export default component$(() => {
         type='text'
         placeholder='Type your search'
         onInput$={(e) =>
-          (valueSignal.value = (e.target as HTMLInputElement).value)
+          (messageSignal.value = (e.target as HTMLInputElement).value)
         }
-        value={valueSignal.value}
+        value={messageSignal.value}
       />
       <hr />
-      <Projector message={valueSignal.value} />
+      <Projector message={messageSignal.value} color={colorSignal.value}>
+        Your message is:
+      </Projector>
     </div>
   );
 });
